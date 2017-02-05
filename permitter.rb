@@ -1,4 +1,5 @@
 require 'mechanize'
+require 'date'
 
 @log = Logger.new(STDOUT)
 @log.level = Logger::INFO
@@ -9,8 +10,9 @@ require 'mechanize'
   a.log = @log
 }
 
-date = "2017-04-06"
 credentials = YAML.load_file "credentials.yml"
+
+date = YAML.load_file "date.yml"
 
 page = @agent.get "https://select-a-spot.com/bart/"
 page = page.form_with(:id => "site-login") do |login|
@@ -24,15 +26,18 @@ page = page.form_with(:action => "/bart/reservations/date/") do |form|
   form.radiobutton_with(:id => "type_id_40").check
 end.submit
 
+@log.info "Attempting to reserve #{date}"
 # http://mechanize.rubyforge.org/Mechanize/Page.html
 page = page.form_with(:action => "/bart/reservations/date/") do |form|
-  form.start_date = date
-  form.end_date = date
+  form.start_date =
+    form.end_date = date.to_s
 end.submit
 
 if (page.body =~ /Reservations cannot be made more than two months in advance/)
   @log.info "Too far out"
 else
+  File.open('date.yml', 'w') {|f| f.write date.succ.to_yaml } #Store
+
   if (page.body =~ /This facility has no availability for the date range you selected. Please choose from one of the following facilities which do have availability,/)
     page = page.form_with(:action => "/bart/reservations/date/") do |form|
       form.radiobutton_with(:id => "type_id_37").check
