@@ -3,6 +3,7 @@
 require 'mechanize'
 require 'date'
 require 'thor'
+require 'json'
 
 
 LOGFILE = File.join(Dir.home, '.permitter.log')
