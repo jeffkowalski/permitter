@@ -108,13 +108,20 @@ class Permitter < Thor
 
     if (page.body =~ /Reservations cannot be made more than two months in advance/)
       $logger.error "too far in advance"
+      return
     else
       File.open('date.yml', 'w') {|f| f.write date.succ.to_yaml } #Store
 
       if (page.body =~ /This facility has no availability for the date range you selected. Please choose from one of the following facilities which do have availability,/)
         $logger.info "lafayette full, selecting orinda station"
         page = page.form_with(:action => "/bart/reservations/date/") do |form|
-          form.radiobutton_with(:id => "type_id_37").check
+          button = form.radiobutton_with(:id => "type_id_37")
+          if button.nil?
+            $logger.error "orinda is also full"
+            return
+          else
+            button.check
+          end
         end.submit
       end
 
