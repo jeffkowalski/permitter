@@ -85,7 +85,7 @@ class Permitter < Thor
       end
 
       $logger.info "(1/6) logging in"
-      page = @agent.get "https://select-a-spot.com/bart/"
+      page = @agent.get "https://www.select-a-spot.com/bart/"
       credentials = YAML.load_file CREDENTIALS_PATH
       page = page.form_with(:id => "site-login") do |login|
         login.username = credentials[:username]
