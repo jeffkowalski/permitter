@@ -27,10 +27,17 @@ Create a file named ```credentials.yml``` containing your login to Select-a-Spot
 :password: 'secret'
 ```
 
-Create a file named ```date.yml``` with the first date to reserve.  The permitter will automatically re-write this file with the advancing date of the next reservation.
+Create a file named ```date.yml``` with the first date to reserve.  The permitter will automatically re-write this file with the advancing date of the next reservation.  You may optionally specify date ranges to skip.
 
 ``` yaml
---- 2017-10-06
+---
+:current: 2018-04-03
+:skips:
+  - :from: 2018-04-09
+    :to: 2018-04-13
+  - :from: 2018-05-03
+    :to: 2018-05-13
+...
 ...
 ```
 
