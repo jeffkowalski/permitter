@@ -38,7 +38,6 @@ Create a file named ```date.yml``` with the first date to reserve.  The permitte
   - :from: 2018-05-03
     :to: 2018-05-13
 ...
-...
 ```
 
 ## Usage
